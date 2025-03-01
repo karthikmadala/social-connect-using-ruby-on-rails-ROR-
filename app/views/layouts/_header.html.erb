@@ -10,12 +10,14 @@
         <li class="nav-item">
           <%= link_to "Users", users_index_path, class: "nav-link hover-effect" %>
         </li>
+        <% unless current_user.admin?%>
         <li class="nav-item">
           <%= link_to "Friends", friendships_path, class: "nav-link hover-effect" %>
         </li>
         <li class="nav-item">
           <%= link_to "Requests", friend_requests_path, class: "nav-link hover-effect" %>
         </li>
+        <% end %>
       </ul>
 
       <!-- Search Bar and Button -->
