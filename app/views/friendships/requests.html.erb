@@ -1,4 +1,4 @@
-<h1>Pending Friend Requests</h1>
+<h1>Reciving Friend Requests</h1>
 
 <% if @friend_requests.any? %>
   <ul>
@@ -7,7 +7,7 @@
         <%= request.user.full_name %> sent you a friend request.
         <%= button_to "Accept", accept_friendship_path(request), method: :post %>
 
-        <%= link_to 'Reject', reject_friendship_path(request), method: :delete, data: { confirm: 'Are you sure?' } %>
+        <%= button_to 'Reject', reject_friendship_path(request), method: :delete, data: { confirm: 'Are you sure?' } %>
       </li>
     <% end %>
   </ul>

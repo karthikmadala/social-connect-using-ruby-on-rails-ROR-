@@ -2,15 +2,16 @@
         <div class="container d-flex justify-content-center">
           <div class="card text-center shadow-lg" style="width: 25rem;">
             <div class="card-body">
-              <h1 class="card-title">Welcome, <%= current_user.email %>!</h1>
-              <p class="lead">Welcome, <%= current_user.email %>!</p>
-              <p><strong><%= current_user.first_name %> <%= current_user.last_name %></strong></p>
-              <p>Phone: <%= current_user.phone %></p>
+              <h1 class="card-title">Your Profile</h1>
               <% if current_user.avatar.attached? %>
                 <%= image_tag current_user.avatar.variant(resize_to_limit: [150, 150]).processed, class: "rounded-circle img-thumbnail mb-3" %>
               <% else %>
                 <%= image_tag "default-user.jpg", class: "rounded-circle img-thumbnail mb-3", alt: "Default User" %>
               <% end %>
+              <p><strong><%= current_user.first_name %> <%= current_user.last_name %></strong></p>
+              <h2 class="lead"><%= current_user.email %></h2>
+              <p>Phone: <%= current_user.phone %></p>
+              <%= link_to "Edit", edit_user_registration_path, class:"btn btn-primary "%>
             </div>
           </div>
         </div>
