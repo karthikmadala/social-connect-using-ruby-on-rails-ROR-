@@ -1,55 +1,66 @@
 <div class="d-flex justify-content-center align-items-center vh-100">
   <div class="glass-container p-4 rounded">
-    <h2 class="text-center text-black mb-4">Sign Up</h2>
+    <h2 class="text-center text-white mb-4">Sign Up</h2>
 
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
 
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <%= f.label :first_name, class: "text-white" %>
-          <%= f.text_field :first_name, class: "form-control", autofocus: true, placeholder: "Enter your first name" %>
+      <!-- First Name and Last Name Side by Side -->
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <%= f.label :first_name, class: "text-white" %>
+            <%= f.text_field :first_name, class: "form-control", autofocus: true, placeholder: "Enter your first name" %>
+          </div>
         </div>
-
-        <div class="form-group col-md-6">
-          <%= f.label :last_name, class: "text-white" %>
-          <%= f.text_field :last_name, class: "form-control", placeholder: "Enter your last name" %>
+        <div class="col-md-6">
+          <div class="form-group">
+            <%= f.label :last_name, class: "text-white" %>
+            <%= f.text_field :last_name, class: "form-control", placeholder: "Enter your last name" %>
+          </div>
         </div>
       </div>
 
+      <!-- Email Field -->
       <div class="form-group">
         <%= f.label :email, class: "text-white" %>
         <%= f.email_field :email, class: "form-control", autocomplete: "email", placeholder: "Enter your email" %>
       </div>
 
+      <!-- Phone Field -->
       <div class="form-group">
         <%= f.label :phone, class: "text-white" %>
         <%= f.text_field :phone, class: "form-control", autocomplete: "tel", placeholder: "Enter your phone number" %>
       </div>
 
+      <!-- Avatar Field -->
       <div class="form-group">
         <%= f.label :avatar, class: "text-white" %>
         <%= f.file_field :avatar, accept: "image/*", class: "form-control" %>
       </div>
 
+      <!-- Password Field -->
       <div class="form-group">
         <%= f.label :password, class: "text-white" %> 
         <% if @minimum_password_length %>
-          <small class="text-light"><%= @minimum_password_length %> characters minimum</small>
+          <small class="text-light">(<%= @minimum_password_length %> characters minimum)  </small>
         <% end %>
         <%= f.password_field :password, class: "form-control", autocomplete: "new-password", placeholder: "Enter your password" %>
       </div>
 
+      <!-- Password Confirmation Field -->
       <div class="form-group">
         <%= f.label :password_confirmation, class: "text-white" %>
         <%= f.password_field :password_confirmation, class: "form-control", autocomplete: "new-password", placeholder: "Confirm your password" %>
       </div>
 
-      <div class="form-group text-center">
+      <!-- Sign Up Button with Margin -->
+      <div class="form-group text-center mt-4">
         <%= f.submit "Sign up", class: "btn btn-primary w-100 btn-gradient" %>
       </div>
     <% end %>
 
+    <!-- Devise Shared Links -->
     <div class="text-center mt-3">
       <%= render "devise/shared/links" %>
     </div>

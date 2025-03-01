@@ -1,15 +1,99 @@
-<h1>Reciving Friend Requests</h1>
+<div class="container mt-4">
+  <h1 class="text-center text-white mb-4">Receiving Friend Requests</h1>
 
-<% if @friend_requests.any? %>
-  <ul>
-    <% @friend_requests.each do |request| %>
-      <li>
-        <%= request.user.full_name %> sent you a friend request.
-        <%= button_to "Accept", accept_friendship_path(request), method: :post %>
-        <%= button_to 'Reject', reject_friendship_path(request), method: :delete, data: { confirm: 'Are you sure?' } %>
-      </li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>No pending friend requests.</p>
-<% end %>
+  <% if @friend_requests.any? %>
+    <div class="row">
+      <% @friend_requests.each do |request| %>
+        <div class="col-md-6 mb-4">
+          <div class="card shadow-sm glass-container">
+            <div class="card-body">
+              <div class="d-flex align-items-center">
+                <!-- User Avatar -->
+                <% if request.user.avatar.attached? %>
+                  <%= image_tag request.user.avatar.variant(resize_to_limit: [80, 80]).processed, class: "rounded-circle img-thumbnail me-3 border-white" %>
+                <% else %>
+                  <%= image_tag "default-user.jpg", class: "rounded-circle img-thumbnail me-3 border-white", alt: "Default User", width: 80, height: 80 %>
+                <% end %>
+
+                <!-- User Details -->
+                <div>
+                  <h5 class="card-title text-white"><%= request.user.full_name %></h5>
+                  <p class="text-muted">Sent you a friend request.</p>
+                </div>
+              </div>
+
+              <!-- Accept and Reject Buttons -->
+              <div class="d-flex justify-content-end mt-3">
+                <%= button_to "Accept", accept_friendship_path(request), method: :post, class: "btn btn-success btn-gradient me-2" %>
+                <%= button_to "Reject", reject_friendship_path(request), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger btn-gradient" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-center text-white">No pending friend requests.</p>
+  <% end %>
+</div>
+
+<style>
+  body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-attachment: fixed;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .glass-container {
+    background: rgba(255, 255, 255, 0.1); /* Transparent White */
+    backdrop-filter: blur(15px); /* Frosted Glass Effect */
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); /* Soft Shadow */
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    animation: fadeIn 1s ease-in-out;
+  }
+
+  .btn-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .btn-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .btn-success {
+    background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+  }
+
+  .btn-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  }
+
+  .text-white {
+    color: white !important;
+  }
+
+  .border-white {
+    border: 3px solid rgba(255, 255, 255, 0.5);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .text-muted {
+    color: rgba(255, 255, 255, 0.7) !important;
+  }
+</style>

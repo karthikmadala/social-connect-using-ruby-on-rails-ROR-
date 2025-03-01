@@ -68,9 +68,9 @@ class FriendshipsController < ApplicationController
     friendship = Friendship.between(current_user, User.find(params[:friend_id])).first
     if friendship
       friendship.destroy
-      redirect_to friends_path, notice: "You are no longer friends."
+      redirect_to users_path, notice: "You are no longer friends."
     else
-      redirect_to friends_path, alert: "Friendship not found."
+      redirect_to users_path, alert: "Friendship not found."
     end
   end
 end
