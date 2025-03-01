@@ -1,0 +1,35 @@
+<div class="position-fixed start-0 top-10 m-3" style="z-index: 1050;">
+  <% if notice.present? %>
+    <div class="alert alert-success alert-dismissible fade show small-alert" role="alert">
+      <%= notice %>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% end %>
+
+  <% if alert.present? %>
+    <div class="alert alert-danger alert-dismissible fade show small-alert" role="alert">
+      <%= alert %>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% end %>
+</div>
+
+<style>
+  .small-alert {
+    font-size: 14px; 
+    padding: 8px 12px;
+    max-width: 3000px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    opacity: 0.9;
+  }
+</style>
+
+<script>
+  setTimeout(function() {
+    document.querySelectorAll('.alert').forEach(alert => {
+      let bsAlert = new bootstrap.Alert(alert);
+      bsAlert.close();
+    });
+  }, 6000);
+</script>
