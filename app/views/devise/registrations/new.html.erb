@@ -1,73 +1,136 @@
-<h2>Sign up</h2>
+<div class="d-flex justify-content-center align-items-center vh-100">
+  <div class="glass-container p-4 rounded">
+    <h2 class="text-center text-black mb-4">Sign Up</h2>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
 
-  <!-- First Name and Last Name in a Row -->
-  <div class="form-row">
-    <div class="form-group col-md-6">
-      <%= f.label :first_name %><br />
-      <%= f.text_field :first_name, class: "form-control", autofocus: true %>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <%= f.label :first_name, class: "text-white" %>
+          <%= f.text_field :first_name, class: "form-control", autofocus: true, placeholder: "Enter your first name" %>
+        </div>
+
+        <div class="form-group col-md-6">
+          <%= f.label :last_name, class: "text-white" %>
+          <%= f.text_field :last_name, class: "form-control", placeholder: "Enter your last name" %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :email, class: "text-white" %>
+        <%= f.email_field :email, class: "form-control", autocomplete: "email", placeholder: "Enter your email" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :phone, class: "text-white" %>
+        <%= f.text_field :phone, class: "form-control", autocomplete: "tel", placeholder: "Enter your phone number" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :avatar, class: "text-white" %>
+        <%= f.file_field :avatar, accept: "image/*", class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password, class: "text-white" %> 
+        <% if @minimum_password_length %>
+          <small class="text-light"><%= @minimum_password_length %> characters minimum</small>
+        <% end %>
+        <%= f.password_field :password, class: "form-control", autocomplete: "new-password", placeholder: "Enter your password" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password_confirmation, class: "text-white" %>
+        <%= f.password_field :password_confirmation, class: "form-control", autocomplete: "new-password", placeholder: "Confirm your password" %>
+      </div>
+
+      <div class="form-group text-center">
+        <%= f.submit "Sign up", class: "btn btn-primary w-100 btn-gradient" %>
+      </div>
+    <% end %>
+
+    <div class="text-center mt-3">
+      <%= render "devise/shared/links" %>
     </div>
+  </div>
+</div>
 
-    <div class="form-group col-md-6">
-      <%= f.label :last_name %><br />
-      <%= f.text_field :last_name, class: "form-control" %>
-    </div>
-  </div>
-  
-  <!-- Email Field -->
-  <div class="form-group">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, class: "form-control", autofocus: true, autocomplete: "email" %>
-  </div>
-
-  <!-- Phone Field -->
-  <div class="form-group">
-    <%= f.label :phone %><br />
-    <%= f.text_field :phone, class: "form-control", autocomplete: "tel" %>
-  </div>
-  
-  <div class="form-group">
-    <%= f.label :avatar %><br />
-    <%= f.file_field :avatar,accept: "image/*" ,class: "form-control"%>
-  </div>
-  <!-- Password Field -->
-  <div class="form-group">
-    <%= f.label :password %>
-    <% if @minimum_password_length %>
-    <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
-    <%= f.password_field :password, class: "form-control", autocomplete: "new-password" %>
-  </div>
-
-  <!-- Password Confirmation Field -->
-  <div class="form-group">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, class: "form-control", autocomplete: "new-password" %>
-  </div>
-
-  <!-- Submit Button -->
-  <div class="form-group">
-    <%= f.submit "Sign up", class: "btn btn-primary" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
-
-<!-- Additional Styles for Transparent Form -->
 <style>
-  /* Make form background transparent */
-  form {
-    background-color: transparent !important;
-    padding: 20px;  /* Optional: adjust padding if needed */
-    border-radius: 8px; /* Optional: round the edges */
-    box-shadow: none;  /* Optional: remove shadow if any */
+  body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-attachment: fixed;
+    font-family: 'Poppins', sans-serif;
   }
 
-  /* Make the container or body background transparent */
-  body, .container {
-    background-color: transparent !important;
-    background-image: none !important;  /* If you want to remove any background images */
+  .glass-container {
+    background: rgba(255, 255, 255, 0.1); /* Transparent white */
+    backdrop-filter: blur(15px); /* Frosted glass effect */
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); /* Soft shadow */
+    border-radius: 15px;
+    max-width: 500px;
+    width: 100%;
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    animation: fadeIn 1s ease-in-out;
+  }
+
+  .btn-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .btn-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .form-control {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    transition: border-color 0.3s ease;
+  }
+
+  .form-control:focus {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: none;
+    color: white;
+  }
+
+  .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  h2 {
+    font-weight: 600;
+    color: white;
+  }
+
+  .text-white {
+    color: white !important;
+  }
+
+  .text-light {
+    color: rgba(255, 255, 255, 0.7) !important;
+  }
+
+  .text-black {
+    color: black !important;
   }
 </style>

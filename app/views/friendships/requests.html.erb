@@ -6,7 +6,6 @@
       <li>
         <%= request.user.full_name %> sent you a friend request.
         <%= button_to "Accept", accept_friendship_path(request), method: :post %>
-
         <%= button_to 'Reject', reject_friendship_path(request), method: :delete, data: { confirm: 'Are you sure?' } %>
       </li>
     <% end %>

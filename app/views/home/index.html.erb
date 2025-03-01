@@ -1,25 +1,83 @@
-      <% if user_signed_in? %>
-        <div class="container d-flex justify-content-center">
-          <div class="card text-center shadow-lg" style="width: 25rem;">
-            <div class="card-body">
-              <h1 class="card-title">Your Profile</h1>
-              <% if current_user.avatar.attached? %>
-                <%= image_tag current_user.avatar.variant(resize_to_limit: [150, 150]).processed, class: "rounded-circle img-thumbnail mb-3" %>
-              <% else %>
-                <%= image_tag "default-user.jpg", class: "rounded-circle img-thumbnail mb-3", alt: "Default User" %>
-              <% end %>
-              <p><strong><%= current_user.first_name %> <%= current_user.last_name %></strong></p>
-              <h2 class="lead"><%= current_user.email %></h2>
-              <p>Phone: <%= current_user.phone %></p>
-              <%= link_to "Edit", edit_user_registration_path, class:"btn btn-primary "%>
-            </div>
-          </div>
-        </div>
-      <% else %>
-        <div class="container text-center mt-5">
-          <div class="card shadow-lg p-4">
-            <p class="lead">Please <%= link_to 'sign in', new_user_session_path, class: "btn btn-primary" %> to continue.</p>
-          </div>
-        </div>
-      <% end %>
+<% if user_signed_in? %>
+  <div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card text-center shadow-lg glass-container" style="width: 25rem;">
+      <div class="card-body">
+        <h1 class="card-title text-white mb-4">Your Profile</h1>
+        <% if current_user.avatar.attached? %>
+          <%= image_tag current_user.avatar.variant(resize_to_limit: [150, 150]).processed, class: "rounded-circle img-thumbnail mb-3 border-white" %>
+        <% else %>
+          <%= image_tag "default-user.jpg", class: "rounded-circle img-thumbnail mb-3 border-white", alt: "Default User" %>
+        <% end %>
+        <p class="text-white"><strong><%= current_user.first_name %> <%= current_user.last_name %></strong></p>
+        <h2 class="lead text-white"><%= current_user.email %></h2>
+        <p class="text-white">Phone: <%= current_user.phone %></p>
+        <%= link_to "Edit", edit_user_registration_path, class: "btn btn-primary btn-gradient" %>
+      </div>
     </div>
+  </div>
+<% else %>
+  <div class="container text-center mt-5">
+    <div class="card shadow-lg p-4 glass-container">
+      <p class="lead text-white">Please <%= link_to 'sign in', new_user_session_path, class: "btn btn-primary btn-gradient" %> to continue.</p>
+    </div>
+  </div>
+<% end %>
+
+<style>
+  body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-attachment: fixed;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .glass-container {
+    background: rgba(255, 255, 255, 0.1); /* Transparent White */
+    backdrop-filter: blur(15px); /* Frosted Glass Effect */
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); /* Soft Shadow */
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    animation: fadeIn 1s ease-in-out;
+  }
+
+  .btn-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .btn-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .text-white {
+    color: white !important;
+  }
+
+  .border-white {
+    border: 3px solid rgba(255, 255, 255, 0.5);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .card-title {
+    font-weight: 600;
+    color: white;
+  }
+
+  .lead {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.8);
+  }
+</style>

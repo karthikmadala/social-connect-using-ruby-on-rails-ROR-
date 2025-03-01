@@ -1,28 +1,112 @@
-<h2>Log in</h2>
+<div class="d-flex justify-content-center align-items-center vh-100">
+  <div class="glass-container p-4 rounded">
+    <h2 class="text-center text-white mb-4">Log in</h2>
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <div class="form-group">
+        <%= f.label :email, class: "text-white" %><br />
+        <%= f.email_field :email, class: "form-control", autocomplete: "email", placeholder: "Enter your email" %>
+      </div>
 
-  <div class="form-group">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, class: "form-control", autocomplete: "email" %>
-  </div>
+      <div class="form-group">
+        <%= f.label :password, class: "text-white" %><br />
+        <%= f.password_field :password, class: "form-control", autocomplete: "current-password", placeholder: "Enter your password" %>
+      </div>
 
-  <div class="form-group">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, class: "form-control", autocomplete: "current-password" %>
-  </div>
+      <% if devise_mapping.rememberable? %>
+        <div class="form-check mb-3">
+          <%= f.check_box :remember_me, class: "form-check-input" %>
+          <%= f.label :remember_me, class: "form-check-label text-white" %>
+        </div>
+      <% end %>
 
-  <% if devise_mapping.rememberable? %>
-    <div class="form-check">
-      <%= f.check_box :remember_me, class: "form-check-input" %>
-      <%= f.label :remember_me, class: "form-check-label" %>
+      <div class="form-group text-center">
+        <%= f.submit "Log in", class: "btn btn-primary w-100 btn-gradient" %>
+      </div>
+    <% end %>
+
+    <div class="text-center mt-3">
+      <%= render "devise/shared/links" %>
     </div>
-  <% end %>
-
-  <div class="form-group">
-    <%= f.submit "Log in", class: "btn btn-primary" %>
   </div>
-<% end %>
+</div>
 
-<%= render "devise/shared/links" %>
+<style>
+  body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-attachment: fixed;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .glass-container {
+    background: rgba(255, 255, 255, 0.1); /* Transparent White */
+    backdrop-filter: blur(15px); /* Frosted Glass Effect */
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); /* Soft Shadow */
+    border-radius: 15px;
+    max-width: 400px;
+    width: 100%;
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    animation: fadeIn 1s ease-in-out;
+  }
+
+  .btn-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .btn-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .form-control {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    transition: border-color 0.3s ease;
+  }
+
+  .form-control:focus {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: none;
+    color: white;
+  }
+
+  .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  h2 {
+    font-weight: 600;
+    color: white;
+  }
+
+  .text-white {
+    color: white !important;
+  }
+
+  .form-check-input {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .form-check-label {
+    color: rgba(255, 255, 255, 0.8);
+  }
+</style>

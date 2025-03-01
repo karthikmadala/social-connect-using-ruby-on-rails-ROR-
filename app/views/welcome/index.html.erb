@@ -1,15 +1,15 @@
-<div class="container text-center mt-5">
-  <h1 class="display-4">Welcome to My App</h1>
-  <p class="lead">This is the home page for non-logged-in users.</p>
+  <div class="container text-center">
+    <h1 class="display-4">Welcome to My App</h1>
+    <p class="lead">This is the home page for non-logged-in users.</p>
 
-  <% if user_signed_in? %>
-    <div class="alert alert-success">
-      <p>You are logged in as <strong><%= current_user.email %></strong>.</p>
-    </div>
-  <% else %>
-    <p>
-      <%= link_to 'Login', new_user_session_path, class: 'btn btn-primary me-2' %>
-      <%= link_to 'Sign Up', new_user_registration_path, class: 'btn btn-success' %>
-    </p>
-  <% end %>
-</div>
+    <% if user_signed_in? %>
+      <div class="alert alert-success">
+        <p>You are logged in as <strong><%= current_user.email %></strong>.</p>
+      </div>
+    <% else %>
+      <p>
+        <%= link_to 'Login', new_user_session_path, class: 'btn btn-primary me-2' %>
+        <%= link_to 'Sign Up', new_user_registration_path, class: 'btn btn-success' %>
+      </p>
+    <% end %>
+  </div>
