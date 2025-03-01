@@ -1,0 +1,22 @@
+<div class="container mt-4">
+  <h1 class="text-center"><%= @user.first_name %> <%= @user.last_name %></h1>
+
+  <h2 class="mt-4">Friends:</h2>
+  
+  <% if @user.friends.any? %>
+    <ul class="list-group">
+      <% @user.friends.each do |friend| %>
+        <li class="list-group-item d-flex align-items-center">
+          <% if friend.avatar.attached? %>
+            <%= image_tag friend.avatar.variant(resize_to_limit: [50, 50]).processed, class: "rounded-circle img-thumbnail me-3" %>
+          <% else %>
+            <%= image_tag "default-user.jpg", class: "rounded-circle img-thumbnail me-3", alt: "Default User", width: 50, height: 50 %>
+          <% end %>
+          <span><%= friend.first_name %> <%= friend.last_name %></span>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p class="text-muted">No friends yet.</p>
+  <% end %>
+</div>

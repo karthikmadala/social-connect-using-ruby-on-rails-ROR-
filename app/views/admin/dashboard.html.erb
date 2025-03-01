@@ -1,0 +1,44 @@
+<% if user_signed_in? %>
+  <div class="container text-center mt-4">
+    <h2 class="mb-3">
+      Welcome, <%= current_user.admin? ? "Admin" : "User" %> <%= current_user.first_name %>!
+    </h2>
+
+    <div class="d-flex flex-column align-items-center">
+      <% if current_user.avatar.attached? %>
+        <%= image_tag current_user.avatar.variant(resize_to_limit: [150, 150]).processed, class: "rounded-circle img-thumbnail mb-3 shadow-sm" %>
+      <% else %>
+        <%= image_tag current_user.admin? ? "default-admin.jpg" : "default-user.jpg", 
+                  class: "rounded-circle img-thumbnail mb-3 shadow-sm", 
+                  alt: "Default Avatar", width: 150, height: 150 %>
+      <% end %>
+      
+      <p class="lead"><strong><%= current_user.first_name %> <%= current_user.last_name %></strong></p>
+      <p class="text-muted">Email: <%= current_user.email %></p>
+      <% if current_user.phone.present? %>
+        <p class="text-muted">Phone: <%= current_user.phone %></p>
+      <% end %>
+
+      <% if current_user.admin? %>
+        <div class="mt-3">
+          <%= link_to "Admin Dashboard", admin_dashboard_path, class: "btn btn-outline-primary me-2" %>
+          <%= link_to "Manage Users", users_path, class: "btn btn-outline-secondary" %>
+        </div>
+      <% else %>
+        <div class="mt-3">
+          <%= link_to "Edit Profile", edit_user_registration_path, class: "btn btn-outline-primary me-2" %>
+          <%= link_to "View Friends", friendships_path, class: "btn btn-outline-secondary" %>
+        </div>
+      <% end %>
+      
+      <div class="mt-4">
+        <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "btn btn-danger" %>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <div class="container text-center mt-5">
+    <p class="lead">Welcome to our platform!</p>
+    <p>Please <%= link_to 'sign in', new_user_session_path, class: "btn btn-primary" %> to continue.</p>
+  </div>
+<% end %>

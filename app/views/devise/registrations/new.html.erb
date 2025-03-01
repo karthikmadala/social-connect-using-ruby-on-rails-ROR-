@@ -1,0 +1,73 @@
+<h2>Sign up</h2>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <!-- First Name and Last Name in a Row -->
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <%= f.label :first_name %><br />
+      <%= f.text_field :first_name, class: "form-control", autofocus: true %>
+    </div>
+
+    <div class="form-group col-md-6">
+      <%= f.label :last_name %><br />
+      <%= f.text_field :last_name, class: "form-control" %>
+    </div>
+  </div>
+  
+  <!-- Email Field -->
+  <div class="form-group">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, class: "form-control", autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <!-- Phone Field -->
+  <div class="form-group">
+    <%= f.label :phone %><br />
+    <%= f.text_field :phone, class: "form-control", autocomplete: "tel" %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :avatar %><br />
+    <%= f.file_field :avatar,accept: "image/*" ,class: "form-control"%>
+  </div>
+  <!-- Password Field -->
+  <div class="form-group">
+    <%= f.label :password %>
+    <% if @minimum_password_length %>
+    <em>(<%= @minimum_password_length %> characters minimum)</em>
+    <% end %><br />
+    <%= f.password_field :password, class: "form-control", autocomplete: "new-password" %>
+  </div>
+
+  <!-- Password Confirmation Field -->
+  <div class="form-group">
+    <%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation, class: "form-control", autocomplete: "new-password" %>
+  </div>
+
+  <!-- Submit Button -->
+  <div class="form-group">
+    <%= f.submit "Sign up", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
+
+<!-- Additional Styles for Transparent Form -->
+<style>
+  /* Make form background transparent */
+  form {
+    background-color: transparent !important;
+    padding: 20px;  /* Optional: adjust padding if needed */
+    border-radius: 8px; /* Optional: round the edges */
+    box-shadow: none;  /* Optional: remove shadow if any */
+  }
+
+  /* Make the container or body background transparent */
+  body, .container {
+    background-color: transparent !important;
+    background-image: none !important;  /* If you want to remove any background images */
+  }
+</style>

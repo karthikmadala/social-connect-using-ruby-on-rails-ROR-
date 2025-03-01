@@ -1,0 +1,29 @@
+<h1>Your Friends</h1>
+
+<% if @friends.any? %>
+  <ul>
+    <% @friends.each do |friend| %>
+      <li>
+        <%= friend.full_name %>
+        <%= link_to 'Unfriend', unfriend_friendships_path(friend_id: friend.id), method: :delete, data: { confirm: 'Are you sure?' } %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>You have no friends yet.</p>
+<% end %>
+
+<h2>Pending Friend Requests</h2>
+
+<% if @pending_requests.any? %>
+  <ul>
+    <% @pending_requests.each do |request| %>
+      <li>
+        <%= request.friend.full_name %>
+         <%= link_to 'Cancel Request', friendships_path(friend_id: request.friend.id), method: :delete, data: { confirm: 'Are you sure?' } %>   
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>You have no pending friend requests.</p>
+<% end %>

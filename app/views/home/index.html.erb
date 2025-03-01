@@ -1,0 +1,24 @@
+      <% if user_signed_in? %>
+        <div class="container d-flex justify-content-center">
+          <div class="card text-center shadow-lg" style="width: 25rem;">
+            <div class="card-body">
+              <h1 class="card-title">Welcome, <%= current_user.email %>!</h1>
+              <p class="lead">Welcome, <%= current_user.email %>!</p>
+              <p><strong><%= current_user.first_name %> <%= current_user.last_name %></strong></p>
+              <p>Phone: <%= current_user.phone %></p>
+              <% if current_user.avatar.attached? %>
+                <%= image_tag current_user.avatar.variant(resize_to_limit: [150, 150]).processed, class: "rounded-circle img-thumbnail mb-3" %>
+              <% else %>
+                <%= image_tag "default-user.jpg", class: "rounded-circle img-thumbnail mb-3", alt: "Default User" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% else %>
+        <div class="container text-center mt-5">
+          <div class="card shadow-lg p-4">
+            <p class="lead">Please <%= link_to 'sign in', new_user_session_path, class: "btn btn-primary" %> to continue.</p>
+          </div>
+        </div>
+      <% end %>
+    </div>

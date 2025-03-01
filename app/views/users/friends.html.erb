@@ -1,0 +1,14 @@
+<h1>Your Friends</h1>
+
+<% if @friends.any? %>
+  <ul>
+    <% @friends.each do |friend| %>
+      <li>
+        <%= friend.full_name %>
+        <%= link_to 'Unfriend', unfriend_friendships_path(friend_id: friend.id), method: :delete, data: { confirm: 'Are you sure?' } %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>You have no friends yet.</p>
+<% end %>
