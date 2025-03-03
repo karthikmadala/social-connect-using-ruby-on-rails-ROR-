@@ -20,7 +20,7 @@ Rails.application.routes.draw do
       delete :unfriend
     end
   end
-  resources :users, only: [] do
+  resources :users, only: [:destroy] do
     get "profile", on: :member, to: "users#profile", as: "profile"
   end
 
@@ -29,7 +29,7 @@ Rails.application.routes.draw do
 
   get "friend_requests", to: "friendships#requests"
 
-  resources :users, only: [ :index ]
+  resources :users, only: [ :index ,:destroy]
 
   get "friends", to: "users#friends"
 

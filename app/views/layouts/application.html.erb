@@ -25,6 +25,73 @@
       font-family: 'Poppins', sans-serif;
       }
     </style>
+    
+    <!-- CSS for Transparency and Frosted Glass Effect -->
+
+    <style>
+      .glass-container {
+        background: rgba(255, 255, 255, 0.1); /* Transparent White */
+        backdrop-filter: blur(15px); /* Frosted Glass Effect */
+        -webkit-backdrop-filter: blur(15px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); /* Soft Shadow */
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        animation: fadeIn 1s ease-in-out;
+      }
+
+      .btn-gradient {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        color: white;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .btn-gradient:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .text-white {
+        color: white !important;
+      }
+
+      .border-white {
+        border: 3px solid rgba(255, 255, 255, 0.5);
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .card-title {
+        font-weight: 600;
+        color: white;
+      }
+
+      .text-muted {
+        color: rgba(255, 255, 255, 0.7) !important;
+      }
+
+      .badge {
+        font-size: 0.9rem;
+        padding: 0.5rem 0.75rem;
+      }
+
+      .badge.bg-success {
+        background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+      }
+
+      .badge.bg-warning {
+        background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+      }
+    </style>
   </head>
   <body>
 <%# <div class="d-flex justify-content-center align-items-center vh-100" style="background: linear-gradient(225deg, #74ebd5, #ACB6E5);"> %>

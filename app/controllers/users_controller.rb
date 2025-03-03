@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
-  before_action :authenticate_admin!, only: [:profile]
+  before_action :authenticate_admin!, only: [:destroy]
 
   def index
     @users = User.where.not(id: current_user.id)
@@ -13,6 +13,16 @@ class UsersController < ApplicationController
 
   def friends
     @friends = current_user.friends
+  end
+
+  def destroy
+    @user = User.find(params[:id])
+    if @user.admin?
+      redirect_to users_path, alert: "You cannot delete an admin user."
+    else
+      @user.destroy
+      redirect_to users_path, notice: "User successfully deleted."
+    end
   end
 
   private
