@@ -1,0 +1,20 @@
+<li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle" href="#" role="button" id="notificationsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+    🔔 <span class="badge bg-danger" id="notification-count"><%= current_user.notifications.unread.count %></span>
+  </a>
+
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
+    <li>
+      <h6 class="dropdown-header">Notifications</h6>
+    </li>
+    <div id="notifications-list">
+      <%= render partial: "notifications/notifications_list", locals: { notifications: current_user.notifications.limit(5) } %>
+    </div>
+    <li>
+      <hr class="dropdown-divider">
+    </li>
+    <li>
+      <%= link_to "View All", notifications_path, class: "dropdown-item text-center" %>
+    </li>
+  </ul>
+</li>

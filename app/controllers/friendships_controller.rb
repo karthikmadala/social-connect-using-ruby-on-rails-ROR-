@@ -18,6 +18,8 @@ class FriendshipsController < ApplicationController
     else
       @friendship = current_user.sent_friend_requests.build(friend: friend, status: "pending")
       if @friendship.save
+        Notification.create!(user: friend, sender: current_user, message: "You have a new friend request.")
+        broadcast_notification(friend, "You have a new friend request from #{current_user.name}.")
         redirect_to users_path, notice: "Friend request sent!"
       else
         redirect_to users_path, alert: "Could not send request."
@@ -32,6 +34,8 @@ class FriendshipsController < ApplicationController
         friendship.update!(status: "accepted")
         Friendship.create!(user: current_user, friend: friendship.user, status: "accepted")
       end
+      Notification.create!(user: friendship.user, sender: current_user, message: "#{current_user.name} accepted your friend request.")
+      broadcast_notification(friendship.user, "#{current_user.name} accepted your friend request.")
       redirect_to friend_requests_path, notice: "Friend request accepted!"
     else
       redirect_to root_path, alert: "Unauthorized!"
@@ -68,5 +72,11 @@ class FriendshipsController < ApplicationController
     else
       redirect_to users_path, alert: "Friendship not found."
     end
+  end
+
+  private
+
+  def broadcast_notification(user, message)
+    ActionCable.server.broadcast("notifications_#{user.id}", { message: message })
   end
 end

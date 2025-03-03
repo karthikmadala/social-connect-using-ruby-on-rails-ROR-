@@ -1,0 +1,10 @@
+<% notifications.each do |notification| %>
+  <li class="dropdown-item <%= 'bg-light' unless notification.read %>">
+    <%= link_to notification.message, mark_as_read_notification_path(notification), method: :patch, remote: true, class: "d-block text-decoration-none" %>
+    <small class="text-muted"><%= time_ago_in_words(notification.created_at) %> ago</small>
+  </li>
+<% end %>
+
+<% if notifications.empty? %>
+  <li class="dropdown-item text-muted text-center">No new notifications</li>
+<% end %>

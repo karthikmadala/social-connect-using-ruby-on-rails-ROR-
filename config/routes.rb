@@ -32,7 +32,7 @@ Rails.application.routes.draw do
   resources :users, only: [ :index ,:destroy]
 
   get "friends", to: "users#friends"
-
+  get "notifications",to: "layouts#notifications"
   root "welcome#index"
 
   namespace :admin do
@@ -41,4 +41,14 @@ Rails.application.routes.draw do
   devise_scope :user do
     get "/users/sign_out" => "devise/sessions#destroy"
   end
+
+  resources :notifications, only: [:index] do
+    collection do
+      get "recent"
+    end
+    member do
+      patch "mark_as_read"
+    end
+  end
+  
 end

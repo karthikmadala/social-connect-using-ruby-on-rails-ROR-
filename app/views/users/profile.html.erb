@@ -1,4 +1,4 @@
-<%if user_signed_in? || current_user&.admin?%>
+<%if user_signed_in?%>
 <div class="container mt-4">
   <h1 class="text-center text-white mb-4"><%= @user.first_name %> <%= @user.last_name %>'s Profile</h1>
 
