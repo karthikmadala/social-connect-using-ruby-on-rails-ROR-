@@ -1,0 +1,37 @@
+<li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle position-relative" href="#" role="button" id="notificationsDropdown" data-bs-toggle="dropdown" aria-expanded="false">🔔 
+    <span class="badge bg-success rounded-pill"><%= unread_count = current_user.notifications.unread.count %></span>
+  </a>
+    <ul class="dropdown-menu dropdown-menu-end bg-transparent border-0 shadow-none text-light" aria-labelledby="notificationsDropdown">
+      <li><h6 class="dropdown-header text-white">Notifications</h6></li>
+      <div id="notifications-list" class="overflow-auto" style="max-height: 300px;">
+        <% if current_user.notifications.any? %>
+          <%= render partial: "notifications/notifications_list", locals: { notifications: current_user.notifications.limit(5) } %>
+        <% else %>
+          <li class="dropdown-item text-muted text-center">No new notifications</li>
+        <% end %>
+      </div>
+      <li><hr class="dropdown-divider"></li>
+      <li>
+        <%= link_to "View All", notifications_path, class: "dropdown-item text-center text-white" %>
+      </li>
+    </ul>
+</li>
+
+<style>
+/* Ensure the dropdown blends seamlessly */
+.dropdown-menu {
+  background: rgba(0, 0, 0, 0.5) !important; /* Semi-transparent black */
+  backdrop-filter: blur(10px); /* Frosted glass effect */
+  border-radius: 8px;
+}
+
+/* Change item hover effect */
+.dropdown-item {
+  color: white !important;
+}
+
+.dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.2) !important; /* Subtle hover effect */
+}
+</style>

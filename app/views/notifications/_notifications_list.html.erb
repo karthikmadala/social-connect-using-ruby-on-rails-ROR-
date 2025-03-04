@@ -1,12 +1,17 @@
-<% notifications.each do |notification| %>
-  <li class="dropdown-item d-flex justify-content-between align-items-center 
-      <%= notification.read? ? '' : 'bg-secondary-subtle' %>"> 
+<% notifications.order(created_at: :desc).each do |notification| %>
+  <li class="dropdown-item d-flex justify-content-between align-items-center">
     <div class="w-100">
       <%= button_to notification.message, mark_as_read_notification_path(notification), 
           method: :patch, remote: true, 
-          class: "btn btn-link text-start text-decoration-none text-dark fw-semibold w-100 p-0" %>
-      <small class="text-muted d-block"><%= time_ago_in_words(notification.created_at) %> ago</small>
+          class: "btn btn-link text-start text-decoration-none text-black fw-bold w-100 p-0" %>
+      <small class="text-muted d-block">
+        <%= time_ago_in_words(notification.created_at) %> ago
+      </small>
     </div>
+    
+    <% unless notification.read? %>
+      <span class="badge bg-success ms-2">New !</span>
+    <% end %>
   </li>
 <% end %>
 
