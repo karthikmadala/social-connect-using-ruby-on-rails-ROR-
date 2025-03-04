@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "comments/index"
+  get "posts/index"
   get "users/index"
   get "home/index"
   get "admin/dashboard"
@@ -48,6 +50,11 @@ Rails.application.routes.draw do
     member do
       patch "mark_as_read"
     end
+  end
+
+  resources :posts do
+    resources :comments, only: [:create, :destroy]
+    resources :likes, only: [:create, :destroy]  # ✅ Add this line for likes
   end
   
 end

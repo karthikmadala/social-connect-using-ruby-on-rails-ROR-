@@ -14,7 +14,9 @@ class User < ApplicationRecord
   has_many :received_friend_requests, class_name: "Friendship", foreign_key: "friend_id"
   has_many :sent_friend_requests, class_name: "Friendship", foreign_key: "user_id"
   has_many :notifications, dependent: :destroy
-  
+
+  has_many :posts, dependent: :destroy
+
   def full_name
     "#{first_name} #{last_name}"
   end
