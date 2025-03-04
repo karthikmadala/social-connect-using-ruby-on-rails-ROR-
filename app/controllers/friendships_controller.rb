@@ -18,9 +18,8 @@ class FriendshipsController < ApplicationController
     else
       @friendship = current_user.sent_friend_requests.build(friend: friend, status: "pending")
       if @friendship.save
-        Notification.create!(user: friend, sender: current_user, message: "You have a new friend request.")
-        broadcast_notification(friend, "You have a new friend request from #{current_user.name}.")
-        redirect_to users_path, notice: "Friend request sent!"
+        Notification.create!(user: friend, sender: current_user, message: "You have a new friend request from #{current_user.full_name}.")
+        broadcast_notification(friend, "You have a new friend request from #{current_user.full_name}.")
       else
         redirect_to users_path, alert: "Could not send request."
       end
@@ -34,9 +33,8 @@ class FriendshipsController < ApplicationController
         friendship.update!(status: "accepted")
         Friendship.create!(user: current_user, friend: friendship.user, status: "accepted")
       end
-      Notification.create!(user: friendship.user, sender: current_user, message: "#{current_user.name} accepted your friend request.")
-      broadcast_notification(friendship.user, "#{current_user.name} accepted your friend request.")
-      redirect_to friend_requests_path, notice: "Friend request accepted!"
+      Notification.create!(user: friendship.user, sender: current_user, message: "#{current_user.full_name} accepted your friend request.")
+      broadcast_notification(friendship.user, "#{current_user.full_name} accepted your friend request.")
     else
       redirect_to root_path, alert: "Unauthorized!"
     end
@@ -46,6 +44,8 @@ class FriendshipsController < ApplicationController
     friendship = Friendship.find(params[:id])
     if friendship.friend == current_user
       friendship.destroy
+      Notification.create!(user: friendship.user, sender: current_user, message: "#{current_user.full_name} rejected your friend request.")
+      broadcast_notification(friendship.user, "#{current_user.full_name} rejected your friend request.")
       redirect_to friend_requests_path, notice: "Friend request rejected."
     else
       redirect_to root_path, alert: "Unauthorized!"
@@ -56,7 +56,6 @@ class FriendshipsController < ApplicationController
     friendship = current_user.sent_friend_requests.find_by(friend_id: params[:friend_id], status: "pending")
     if friendship
       friendship.destroy
-      redirect_to users_path, notice: "Friend request canceled."
     else
       redirect_to users_path, alert: "No pending request found."
     end

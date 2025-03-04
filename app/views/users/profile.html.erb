@@ -43,6 +43,21 @@
 
                       <!-- View Profile Button -->
                       <%= link_to "View Profile", profile_user_path(friend), class: "btn btn-info btn-sm btn-gradient" %>
+
+                      <% unless current_user.admin? %>
+                <% if current_user.friends.include?(friend) %>
+                  <span class="badge bg-success">✅ Friends</span>
+                <% elsif current_user.sent_friend_requests.exists?(friend_id: friend.id) %>
+                  <div class="mt-3">
+                    <%= button_to 'Cancel Request', unfriend_friendships_path(friend_id: friend.id), 
+                          method: :delete, 
+                          data: { confirm: 'Are you sure?' }, 
+                          class: 'btn btn-warning btn-sm mt-3 btn-gradient' %>
+                  </div>
+                <% else %>
+                  <%= button_to "Add Friend", friendships_path(friend_id: friend.id), method: :post, class: "btn btn-primary btn-sm mt-2 btn-gradient" %>
+                <% end %>
+              <% end %>
                     </div>
                   </div>
                 </div>

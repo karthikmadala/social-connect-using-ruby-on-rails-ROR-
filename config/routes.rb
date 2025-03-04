@@ -32,7 +32,6 @@ Rails.application.routes.draw do
   resources :users, only: [ :index ,:destroy]
 
   get "friends", to: "users#friends"
-  get "notifications",to: "layouts#notifications"
   root "welcome#index"
 
   namespace :admin do

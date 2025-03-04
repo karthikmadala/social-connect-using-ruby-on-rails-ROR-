@@ -4,8 +4,11 @@ class UsersController < ApplicationController
 
   def index
     @users = User.where.not(id: current_user.id)
-    if params[:search].present?
-      @users = @users.where("name ILIKE ?", "%#{params[:search]}%")
+    @friend_requests = current_user.received_friend_requests.pending.includes(:user)
+    if params[:query].present?
+      search_term = "%#{params[:query]}%"
+      @users = User.where("first_name ILIKE ? OR last_name ILIKE ? OR email ILIKE ? OR phone ILIKE ?", 
+                              search_term, search_term, search_term, search_term)
     end
   end
 
