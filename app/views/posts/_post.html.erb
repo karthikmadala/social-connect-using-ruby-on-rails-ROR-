@@ -1,0 +1,9 @@
+<% if @post.media_files.attached? %>
+  <% @post.media_files.each do |file| %>
+    <% if file.content_type.start_with?('image') %>
+      <%= image_tag file %>
+    <% elsif file.content_type.start_with?('video') %>
+      <%= video_tag file, controls: true %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,0 +1,8 @@
+<h3>Suggested Friends</h3>
+<% current_user.suggested_friends.each do |friend| %>
+  <div>
+    <%= image_tag friend.avatar, size: "50x50" %>
+    <%= friend.full_name %>
+    <%= button_to "Add Friend", friendships_path(friend_id: friend.id), method: :post %>
+  </div>
+<% end %>

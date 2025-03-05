@@ -1,0 +1,12 @@
+<div class="user-card">
+  <%= image_tag user.avatar, size: "50x50" %>
+  <p><%= user.full_name %></p>
+  <p>Status: <%= current_user.friendship_status(user) %></p>
+  <% if current_user.friendship_status(user) == "Add Friend" %>
+    <%= button_to "Send Request", friendships_path(friend_id: user.id), method: :post %>
+  <% elsif current_user.friendship_status(user) == "Pending" %>
+    <button disabled>Request Sent</button>
+  <% else %>
+    <button disabled>Friends</button>
+  <% end %>
+</div>

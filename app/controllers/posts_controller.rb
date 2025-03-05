@@ -18,10 +18,20 @@ class PostsController < ApplicationController
     @post = Post.new
   end
 
+  # def create
+  #   @post = current_user.posts.build(post_params)
+  #   if @post.save
+  #     redirect_to posts_path, notice: "Post created successfully!"
+  #   else
+  #     render :new
+  #   end
+  # end
   def create
     @post = current_user.posts.build(post_params)
     if @post.save
-      redirect_to posts_path, notice: "Post created successfully!"
+      @post.extract_mentions
+      flash[:notice] = "Post created successfully!"
+      redirect_to posts_path
     else
       render :new
     end
@@ -49,7 +59,7 @@ class PostsController < ApplicationController
   private
 
   def post_params
-    params.require(:post).permit(:title, :content, photos: [])
+    params.require(:post).permit(:title, :content, :publish_at, photos: [], media_files: [])
   end
 
   def comment_params

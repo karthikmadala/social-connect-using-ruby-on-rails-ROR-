@@ -1,0 +1,110 @@
+<%= form_with model: @post, local: true do |form| %>
+  <div class="card p-3 mb-3">
+    <div class="d-flex align-items-center mb-3">
+      <% if current_user.avatar.attached? %>
+        <%= image_tag current_user.avatar, class: "rounded-circle me-2", width: 50, height: 50 %>
+      <% else %>
+        <%= image_tag "default_avatar.png", class: "rounded-circle me-2", width: 50, height: 50 %>
+      <% end %>
+      
+      <div class="w-100">
+        <%= form.text_area :content, class: "form-control", placeholder: "What's on your mind?", rows: 3 %>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <%= form.file_field :media_files, multiple: true, class: "form-control", id: "media-upload" %>
+    </div>
+
+    <!-- Preview area -->
+    <div id="media-preview" class="d-flex flex-wrap mt-2"></div>
+
+    <%= form.submit "Post", class: "btn btn-primary w-100 mt-3" %>
+  </div>
+<% end %>
+
+<style>
+  .preview-item {
+    position: relative;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+
+  .preview-image,
+  .preview-video {
+    border-radius: 8px;
+    object-fit: cover;
+    width: 150px;
+    height: 150px;
+  }
+
+  #media-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .card {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .form-control {
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 10px;
+  }
+
+  .btn-primary {
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+</style>
+
+<script>
+  // JavaScript to handle the preview of images and videos
+  document.getElementById('media-upload').addEventListener('change', function(event) {
+    const previewContainer = document.getElementById('media-preview');
+    previewContainer.innerHTML = ''; // Clear previous previews
+
+    const files = event.target.files;
+
+    Array.from(files).forEach(file => {
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        const fileURL = e.target.result;
+
+        // Create a preview for each file
+        const filePreview = document.createElement('div');
+        filePreview.classList.add('preview-item');
+
+        if (file.type.startsWith('image/')) {
+          // Image preview
+          const img = document.createElement('img');
+          img.src = fileURL;
+          img.classList.add('preview-image');
+          filePreview.appendChild(img);
+        } else if (file.type.startsWith('video/')) {
+          // Video preview
+          const video = document.createElement('video');
+          video.src = fileURL;
+          video.classList.add('preview-video');
+          video.controls = true;
+          filePreview.appendChild(video);
+        }
+
+        previewContainer.appendChild(filePreview);
+      };
+
+      reader.readAsDataURL(file); // Read the file as a data URL
+    });
+  });
+</script>

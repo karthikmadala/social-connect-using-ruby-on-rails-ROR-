@@ -1,74 +1,79 @@
-<h1>News Feed</h1>
-
-<%= form_with model: @post, local: true do |form| %>
-  <div class="d-flex align-items-center mb-3">
-    <% if current_user.avatar.attached? %>
-      <%= image_tag current_user.avatar, class: "rounded-circle me-2", width: 50, height: 50 %>
-    <% else %>
-      <%= image_tag "default_avatar.png", class: "rounded-circle me-2", width: 50, height: 50 %>
-    <% end %>
-    
-    <div class="w-100">
-      <%= form.text_area :content, class: "form-control", placeholder: "What's on your mind?", rows: 3 %>
-    </div>
-  </div>
-
-  <div class="mb-3">
-  <%= form.file_field :photos, multiple: true, accept: "image/*", class: "form-control", id: "photo-upload" %>
-</div>
-
-<!-- Preview area -->
-<div id="image-preview" class="d-flex flex-wrap mt-2"></div>
-
-
-  <%= form.submit "Post", class: "btn btn-primary w-100" %>
-<% end %>
-
+<h1 class="text-center my-4">News Feed</h1>
+<%= render "posts/form" %>
 <hr>
 
+<!-- Posts List -->
 <ul class="list-group">
   <% @posts.each do |post| %>
-    <li class="list-group-item">
-      <div class="d-flex align-items-center mb-2">
-        <% if post.user.avatar.attached? %>
-          <%= image_tag post.user.avatar, class: "rounded-circle me-2", width: 40, height: 40 %>
-        <% else %>
-          <%= image_tag "default_avatar.png", class: "rounded-circle me-2", width: 40, height: 40 %>
-        <% end %>
-        
-        <div>
-          <strong><%= post.user.email %></strong><br>
-          <small class="text-muted"><%= time_ago_in_words(post.created_at) %> ago</small>
+    <li class="list-group-item mb-3">
+      <!-- Post Header -->
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <div class="d-flex align-items-center">
+          <% if post.user.avatar.attached? %>
+            <%= image_tag post.user.avatar, class: "rounded-circle me-2", width: 40, height: 40 %>
+          <% else %>
+            <%= image_tag "default_avatar.png", class: "rounded-circle me-2", width: 40, height: 40 %>
+          <% end %>
+          
+          <div>
+            <strong><%= post.user.email %></strong><br>
+            <small class="text-muted"><%= time_ago_in_words(post.created_at) %> ago</small>
+          </div>
         </div>
+
+        <!-- Delete Post Button (Visible to Post Creator) -->
+        <% if post.user == current_user %>
+          <%= button_to "Delete Post", post_path(post), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger btn-sm" %>
+        <% end %>
       </div>
 
+      <!-- Post Content -->
       <p><%= post.content %></p>
 
-      <% if post.photos.attached? %>
-        <div class="d-flex flex-wrap">
-          <% post.photos.each do |photo| %>
-            <%= image_tag photo, class: "rounded me-2", width: 150, height: 150 %>
+      <!-- Media Files -->
+      <% if post.media_files.attached? %>
+        <div class="d-flex flex-wrap gap-2">
+          <% post.media_files.each do |file| %>
+            <% if file.content_type.start_with?('image') %>
+              <%= image_tag file, class: "img-fluid rounded", style: "max-width: 100%; height: auto;" %>
+            <% elsif file.content_type.start_with?('video') %>
+              <%= video_tag url_for(file), controls: true, autoplay: true, muted: true, loop: true, class: "img-fluid rounded", style: "max-width: 100%; height: auto;" %>
+            <% end %>
           <% end %>
         </div>
       <% end %>
 
+      <!-- Like and Comment Buttons -->
       <div class="mt-2">
-        <%= button_to "👍 Like (#{post.likes.count})", post_likes_path(post_id: post.id), method: :post, class: "btn btn-outline-primary btn-sm" %>
+        <% if current_user.liked?(post) %>
+          <%= button_to "👍 Like (#{post.likes.count})", post_likes_path(post_id: post.id), method: :post, class: "btn btn-primary btn-sm" %>
+        <% else %>
+          <%= button_to "👍 Like (#{post.likes.count})", post_likes_path(post_id: post.id), method: :post, class: "btn btn-outline-primary btn-sm" %>
+        <% end %>
         <%= link_to "💬 Comment", "#comment-section-#{post.id}", class: "btn btn-outline-secondary btn-sm" %>
       </div>
 
+      <!-- Comments Section -->
       <div id="comment-section-<%= post.id %>" class="mt-3">
         <% post.comments.each do |comment| %>
-          <div class="d-flex align-items-center">
-            <% if comment.user.avatar.attached? %>
-              <%= image_tag comment.user.avatar, class: "rounded-circle me-2", width: 30, height: 30 %>
-            <% else %>
-              <%= image_tag "default_avatar.png", class: "rounded-circle me-2", width: 30, height: 30 %>
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <div class="d-flex align-items-center">
+              <% if comment.user.avatar.attached? %>
+                <%= image_tag comment.user.avatar, class: "rounded-circle me-2", width: 30, height: 30 %>
+              <% else %>
+                <%= image_tag "default_avatar.png", class: "rounded-circle me-2", width: 30, height: 30 %>
+              <% end %>
+              <strong><%= comment.user.email %>:</strong> <%= comment.content %>
+            </div>
+
+            <!-- Delete Comment Button (Visible to Comment Creator) -->
+            <% if comment.user == current_user %>
+              <%= button_to "Delete", post_comment_path(post, comment), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger btn-sm" %>
             <% end %>
-            <strong><%= comment.user.email %>:</strong> <%= comment.content %>
           </div>
         <% end %>
 
+        <!-- Comment Form -->
         <%= form_with model: [post, Comment.new], local: true do |form| %>
           <div class="d-flex mt-2">
             <%= form.text_field :content, class: "form-control me-2", placeholder: "Write a comment..." %>
@@ -80,30 +85,56 @@
   <% end %>
 </ul>
 
+<style>
+/* Custom CSS for better spacing and alignment */
+.list-group-item {
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+.rounded-circle {
+  border: 2px solid #ddd;
+}
+
+#image-preview img {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+</style>
+
 <script>
+// Autoplay videos while scrolling
 document.addEventListener("DOMContentLoaded", function() {
-  const fileInput = document.getElementById("photo-upload");
-  const previewContainer = document.getElementById("image-preview");
+  const videos = document.querySelectorAll("video");
 
-  fileInput.addEventListener("change", function(event) {
-    previewContainer.innerHTML = ""; // Clear previous previews
-    const files = event.target.files;
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.play();
+        } else {
+          entry.target.pause();
+        }
+      });
+    },
+    {
+      threshold: 0.5, // Trigger when 50% of the video is visible
+    }
+  );
 
-    Array.from(files).forEach(file => {
-      if (file.type.startsWith("image/")) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const img = document.createElement("img");
-          img.src = e.target.result;
-          img.classList.add("rounded", "me-2", "mb-2");
-          img.style.width = "100px";
-          img.style.height = "100px";
-          img.style.objectFit = "cover";
-          previewContainer.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-      }
-    });
+  videos.forEach((video) => {
+    observer.observe(video);
   });
 });
 </script>
