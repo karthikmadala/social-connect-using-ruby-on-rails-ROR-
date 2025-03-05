@@ -1,16 +1,16 @@
-# SocialConnect
+## SocialConnect - A Next-Gen Social Networking Platform
 
-## Overview
-SocialConnect is a social networking platform built using Ruby on Rails (RoR). It enables users to connect, interact, and share posts, similar to Facebook. The platform includes features such as user authentication, friendships, posts, likes, comments, and notifications.
+SocialConnect is a feature-rich social networking platform built with Ruby on Rails. It allows users to connect, interact, and share content seamlessly. The platform includes essential social media functionalities such as user authentication, friendships, post creation, likes, comments, and real-time notifications.
 
-## Features
-- **User Authentication**: Uses Devise for secure authentication.
-- **Friendships**: Users can send, accept, and manage friend requests.
-- **Posts & Comments**: Users can create, view, and comment on posts.
-- **Likes**: Users can like posts.
-- **Notifications**: Users receive notifications for interactions.
-- **Admin Panel**: An admin dashboard for user management.
-- **PWA Support**: Progressive Web App (PWA) capabilities.
+### Key Features:
+- **User Authentication:** Secure sign-up, login, and password management powered by Devise.
+- **Friendships:** Send and accept friend requests, manage connections, and unfriend users.
+- **Posts & Comments:** Create and interact with posts, including commenting on friends' updates.
+- **Likes & Notifications:** Like posts and receive real-time notifications for user interactions.
+- **Admin Panel:** Manage user activities and maintain platform integrity with administrative controls.
+- **Progressive Web App (PWA) Support:** Enhancing user experience with offline capabilities and push notifications.
+
+Designed with scalability and performance in mind, SocialConnect leverages PostgreSQL for data management, Active Storage for file handling, and modern front-end technologies to ensure a seamless user experience. Whether you’re looking to build a private social network or scale to a global audience, SocialConnect provides a strong foundation to support your vision.
 
 ## Directory Structure
 ```
