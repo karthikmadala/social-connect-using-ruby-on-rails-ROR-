@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   scan_ruby:
@@ -19,22 +19,27 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - name: Make brakeman executable
+        run: chmod +x bin/brakeman
+
       - name: Scan for common Rails security vulnerabilities using static analysis
         run: bin/brakeman --no-pager
-
   scan_js:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
+        
+      - name: Make importmap executable
+        run: chmod +x bin/importmap
+  
+      - name: Check importmap permissions
+        run: ls -l bin/importmap
+  
+      - name: list bin contents.
+        run: ls -l bin/
+  
       - name: Scan for security vulnerabilities in JavaScript dependencies
         run: bin/importmap audit
 
@@ -60,17 +65,11 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: social_connect
+          POSTGRES_PASSWORD: k
         ports:
           - 5432:5432
         options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
-
-      # redis:
-      #   image: redis
-      #   ports:
-      #     - 6379:6379
-      #   options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
       - name: Install packages
@@ -85,12 +84,18 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - name: Debug database preparation
+        run: bin/rails db:test:prepare --trace
+
       - name: Run tests
         env:
           RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432
-          # REDIS_URL: redis://localhost:6379/0
+          DATABASE_URL: postgres://postgres:password@localhost:5432 # Use the password
         run: bin/rails db:test:prepare test test:system
+
+      - name: List screenshots
+        if: failure()
+        run: ls -l ${{ github.workspace }}/tmp/screenshots
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
