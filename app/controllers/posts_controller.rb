@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: [ :new, :create, :edit, :update, :destroy ]
 
   def index
     # @posts = Post.includes(:user, :photos, :likes, :comments).order(created_at: :desc)
@@ -7,7 +7,7 @@ class PostsController < ApplicationController
 
     @post = Post.new  # Add this line
   end
-  
+
 
   def show
     @post = Post.find(params[:id])
@@ -51,7 +51,7 @@ class PostsController < ApplicationController
   def post_params
     params.require(:post).permit(:title, :content, photos: [])
   end
-  
+
   def comment_params
     params.require(:comment).permit(:content)
   end

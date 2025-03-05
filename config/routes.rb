@@ -22,7 +22,7 @@ Rails.application.routes.draw do
       delete :unfriend
     end
   end
-  resources :users, only: [:destroy] do
+  resources :users, only: [ :destroy ] do
     get "profile", on: :member, to: "users#profile", as: "profile"
   end
 
@@ -31,7 +31,7 @@ Rails.application.routes.draw do
 
   get "friend_requests", to: "friendships#requests"
 
-  resources :users, only: [ :index ,:destroy]
+  resources :users, only: [ :index, :destroy ]
 
   get "friends", to: "users#friends"
   root "welcome#index"
@@ -43,7 +43,7 @@ Rails.application.routes.draw do
     get "/users/sign_out" => "devise/sessions#destroy"
   end
 
-  resources :notifications, only: [:index] do
+  resources :notifications, only: [ :index ] do
     collection do
       get "recent"
     end
@@ -53,8 +53,7 @@ Rails.application.routes.draw do
   end
 
   resources :posts do
-    resources :comments, only: [:create, :destroy]
-    resources :likes, only: [:create, :destroy]  # ✅ Add this line for likes
+    resources :comments, only: [ :create, :destroy ]
+    resources :likes, only: [ :create, :destroy ]  # ✅ Add this line for likes
   end
-  
 end
