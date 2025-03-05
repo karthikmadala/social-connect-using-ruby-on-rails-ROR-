@@ -9,7 +9,7 @@ class AdminController < ApplicationController
 
   def authenticate_admin!
     unless current_user&.admin?
-      redirect_to home_index_path, alert: 'You must be an admin to access this page.'
+      redirect_to home_index_path, alert: "You must be an admin to access this page."
     end
   end
 end
