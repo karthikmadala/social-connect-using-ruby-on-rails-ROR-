@@ -1,13 +1,17 @@
 class Post < ApplicationRecord
   belongs_to :user
   has_many_attached :photos  # Allow multiple images
-  has_many :likes, dependent: :destroy
+
   has_many :comments, dependent: :destroy
   validates :content, presence: true
   has_many_attached :media_files  # Allows image/video uploads
   has_many :mentions, dependent: :destroy
   has_many :mentioned_users, through: :mentions, source: :user
+  has_many :likes, dependent: :destroy
 
+  def liked?(post)
+      likes.exists?(post_id: post.id)
+  end
   # Scope to get scheduled posts
   scope :scheduled, -> { where("publish_at > ?", Time.current) }
 

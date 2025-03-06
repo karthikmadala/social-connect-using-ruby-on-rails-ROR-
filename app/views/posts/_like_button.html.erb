@@ -1,0 +1,17 @@
+<% if current_user.liked?(post) %>
+  <%= button_to "<i class='fas fa-thumbs-up'></i> Like (#{post.likes.count})".html_safe,
+      post_likes_path(post_id: post.id),
+      method: :post,
+      remote: true,
+      class: "btn btn-primary text-black btn-sm like-button",
+      id: "like-button-#{post.id}",
+      aria: { pressed: true } %>
+<% else %>
+  <%= button_to "<i class='far fa-thumbs-up'></i> Like (#{post.likes.count})".html_safe,
+      post_likes_path(post_id: post.id),
+      method: :post,
+      remote: true,
+      class: "btn btn-outline-primary btn-sm like-button",
+      id: "like-button-#{post.id}",
+      aria: { pressed: false } %>
+<% end %>

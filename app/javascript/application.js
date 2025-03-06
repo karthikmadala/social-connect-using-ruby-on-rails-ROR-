@@ -10,3 +10,17 @@ document.addEventListener("turbo:load", function() {
     new bootstrap.Dropdown(dropdownToggleEl)
   });
 });
+
+import "channels"
+
+
+function prependPost(postHtml) {
+  document.getElementById('posts').insertAdjacentHTML('afterbegin', postHtml);
+}
+
+function updatePost(postHtml, postId) {
+  const postElement = document.getElementById(`post-${postId}`);
+  if (postElement) {
+    postElement.outerHTML = postHtml;
+  }
+}

@@ -1,16 +1,13 @@
 class PostsController < ApplicationController
   before_action :authenticate_user!, only: [ :new, :create, :edit, :update, :destroy ]
+  before_action :set_post, only: [ :show, :edit, :update, :destroy ]
 
   def index
-    # @posts = Post.includes(:user, :photos, :likes, :comments).order(created_at: :desc)
-    @posts = Post.includes(:user, :likes, :comments).with_attached_photos.order(created_at: :desc)
-
-    @post = Post.new  # Add this line
+    @posts = Post.includes(:user, :likes, :comments).with_attached_photos.order(created_at: :desc).page(params[:page]).per(10)
+    @post = Post.new
   end
 
-
   def show
-    @post = Post.find(params[:id])
     @comment = Comment.new
   end
 
@@ -18,51 +15,54 @@ class PostsController < ApplicationController
     @post = Post.new
   end
 
-  # def create
-  #   @post = current_user.posts.build(post_params)
-  #   if @post.save
-  #     redirect_to posts_path, notice: "Post created successfully!"
-  #   else
-  #     render :new
-  #   end
-  # end
   def create
     @post = current_user.posts.build(post_params)
     if @post.save
       @post.extract_mentions
-      flash[:notice] = "Post created successfully!"
-      redirect_to posts_path
+      ActionCable.server.broadcast "posts", post: render_to_string(partial: "posts/post", locals: { post: @post })
+      respond_to do |format|
+        format.html { redirect_to posts_path, notice: "Post created!" }
+        format.js { render js: "prependPost('#{j render_to_string(partial: 'posts/post', locals: { post: @post })}');" }
+      end
     else
-      render :new
+      @posts = Post.includes(:user, :likes, :comments).with_attached_photos.order(created_at: :desc).page(params[:page]).per(10)
+      flash.now[:alert] = "Post could not be created. Please check the errors."
+      render :index
     end
   end
 
   def edit
-    @post = current_user.posts.find(params[:id])
   end
 
   def update
-    @post = current_user.posts.find(params[:id])
     if @post.update(post_params)
-      redirect_to posts_path, notice: "Post updated!"
+      respond_to do |format|
+        format.html { redirect_to posts_path, notice: "Post updated!" }
+        format.js { render js: "updatePost('#{j render_to_string(partial: 'posts/post', locals: { post: @post })}', #{@post.id});" }
+      end
     else
       render :edit
     end
   end
 
   def destroy
-    @post = current_user.posts.find(params[:id])
     @post.destroy
-    redirect_to posts_path, notice: "Post deleted."
+    respond_to do |format|
+      format.html { redirect_to posts_path, notice: "Post deleted." }
+      format.js { render js: "document.getElementById('post-#{@post.id}').remove();" }
+    end
   end
 
   private
 
-  def post_params
-    params.require(:post).permit(:title, :content, :publish_at, photos: [], media_files: [])
+  def set_post
+    @post = current_user.posts.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    flash[:alert] = "You are not authorized to perform this action."
+    redirect_to posts_path
   end
 
-  def comment_params
-    params.require(:comment).permit(:content)
+  def post_params
+    params.require(:post).permit(:title, :content, :publish_at, photos: [], media_files: [])
   end
 end

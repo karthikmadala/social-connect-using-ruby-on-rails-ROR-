@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+
+<html>
+
+  <head>
+
+    <title><%= content_for(:title) || "Social Connect" %></title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <%= csrf_meta_tags %>
+
+    <%= csp_meta_tag %>
+
+
+
+    <%= yield :head %>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <%# <%= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+   
+
+    <link rel="icon" href="/k_icon-gold.png" type="image/png">
+
+    <link rel="icon" href="/k_icon-gold.svg" type="image/svg+xml">
+
+    <link rel="apple-touch-icon" href="/k-logo-removebg-preview.png">
+
+   
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+
+    <%= javascript_importmap_tags %>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <style>
+
+      body {
+
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+      background-attachment: fixed;
+
+      font-family: 'Poppins', sans-serif;
+
+      }
+
+    </style>
+
+   
+
+    <!-- CSS for Transparency and Frosted Glass Effect -->
+
+
+
+    <style>
+
+      .glass-container {
+
+        background: rgba(255, 255, 255, 0.1); /* Transparent White */
+
+        backdrop-filter: blur(15px); /* Frosted Glass Effect */
+
+        -webkit-backdrop-filter: blur(15px);
+
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); /* Soft Shadow */
+
+        border-radius: 15px;
+
+        border: 1px solid rgba(255, 255, 255, 0.18);
+
+        animation: fadeIn 1s ease-in-out;
+
+      }
+
+
+
+      .btn-gradient {
+
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+        border: none;
+
+        color: white;
+
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+      }
+
+
+
+      .btn-gradient:hover {
+
+        transform: translateY(-2px);
+
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+
+      }
+
+
+
+      .text-white {
+
+        color: white !important;
+
+      }
+
+
+
+      .border-white {
+
+        border: 3px solid rgba(255, 255, 255, 0.5);
+
+      }
+
+
+
+      @keyframes fadeIn {
+
+        from {
+
+          opacity: 0;
+
+          transform: translateY(-20px);
+
+        }
+
+        to {
+
+          opacity: 1;
+
+          transform: translateY(0);
+
+        }
+
+      }
+
+
+
+      .card-title {
+
+        font-weight: 600;
+
+        color: white;
+
+      }
+
+
+
+      .text-muted {
+
+        color: rgba(255, 255, 255, 0.7) !important;
+
+      }
+
+
+
+      .badge {
+
+        font-size: 0.9rem;
+
+        padding: 0.5rem 0.75rem;
+
+      }
+
+
+
+      .badge.bg-success {
+
+        background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+
+      }
+
+
+
+      .badge.bg-warning {
+
+        background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+
+      }
+
+    </style>
+
+  </head>
+
+  <body>
+
+<%# <div class="d-flex justify-content-center align-items-center vh-100" style="background: linear-gradient(225deg, #74ebd5, #ACB6E5);"> %>
+
+
+
+    <% if user_signed_in? %>
+
+    <%= render "layouts/header"%>
+
+    <% end %>
+
+
+
+    <div class="container">
+
+      <%= render "layouts/alerts"%>
+
+      <%= yield %>
+
+    </div>
+
+<%# </div> %>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  </body>
+
+</html>
+
+<li class="list-group-item mb-3" id="post-<%= post.id %>">
+
+  <div class="d-flex align-items-center justify-content-between mb-2">
+
+    <div class="d-flex align-items-center">
+
+      <% if post.user.avatar.attached? %>
+
+        <%= image_tag post.user.avatar, class: "rounded-circle me-2", width: 40, height: 40 %>
+
+      <% else %>
+
+        <%= image_tag "default_avatar.png", class: "rounded-circle me-2", width: 40, height: 40 %>
+
+      <% end %>
+
+
+
+      <div>
+
+        <strong><%= post.user.email %></strong><br>
+
+        <small class="text-muted"><%= time_ago_in_words(post.created_at) %> ago</small>
+
+      </div>
+
+    </div>
+
+
+
+    <% if post.user == current_user %>
+
+      <div>
+
+        <%# <%= link_to "Edit", edit_post_path(post), class: "btn btn-secondary btn-sm me-1", remote: true %>
+
+        <%= button_to "Delete Post", post_path(post), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger btn-sm", remote: true %>
+
+      </div>
+
+    <% end %>
+
+  </div>
+
+
+
+  <p><%= post.content %></p>
+
+
+
+  <% if post.media_files.attached? %>
+
+    <div class="d-flex flex-wrap gap-2">
+
+      <% post.media_files.each do |file| %>
+
+        <% if file.content_type.start_with?('image') %>
+
+          <%= image_tag file, class: "img-fluid rounded", style: "max-width: 100%; height: auto;" %>
+
+        <% elsif file.content_type.start_with?('video') %>
+
+          <%= video_tag url_for(file), controls: true, autoplay: true, muted: true, loop: true, class: "img-fluid rounded", style: "max-width: 100%; height: auto;" %>
+
+        <% end %>
+
+      <% end %>
+
+    </div>
+
+  <% end %>
+
+
+
+  <div class="mt-2">
+
+    <%= render 'posts/like_button', post: post %>
+
+    <%= link_to "💬 Comment", "#comment-section-#{post.id}", class: "btn btn-outline-secondary btn-sm" %>
+
+  </div>
+
+
+
+  <div id="comment-section-<%= post.id %>" class="mt-3">
+
+    <% post.comments.each do |comment| %>
+
+      <div class="d-flex align-items-center justify-content-between mb-2">
+
+        <div class="d-flex align-items-center">
+
+          <% if comment.user.avatar.attached? %>
+
+            <%= image_tag comment.user.avatar, class: "rounded-circle me-2", width: 30, height: 30 %>
+
+          <% else %>
+
+            <%= image_tag "default_avatar.png", class: "rounded-circle me-2", width: 30, height: 30 %>
+
+          <% end %>
+
+          <strong><%= comment.user.email %>:</strong> <%= comment.content %>
+
+        </div>
+
+
+
+        <% if comment.user == current_user %>
+
+          <div>
+
+            <%# <%= link_to "Edit", edit_post_comment_path(post, comment), class: "btn btn-secondary btn-sm me-1", remote: true %>
+
+            <%= button_to "Delete", post_comment_path(post, comment), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger btn-sm", remote: true %>
+
+          </div>
+
+        <% end %>
+
+      </div>
+
+    <% end %>
+
+
+
+    <%= form_with model: [post, Comment.new], local: true, remote: true do |form| %>
+
+      <div class="d-flex mt-2">
+
+        <%= form.text_field :content, class: "form-control me-2", placeholder: "Write a comment..." %>
+
+        <%= form.submit "Post", class: "btn btn-primary btn-sm" %>
+
+      </div>
+
+    <% end %>
+
+  </div>
+
+</li><%= render "posts/form"%>
+
+<hr>
+
+<ul class="list-group" id="posts">
+
+  <% @posts.each do |post| %>
+
+    <%= render 'posts/post', post: post %>
+
+  <% end %>
+
+</ul>
+
+
+
+<%= paginate @posts, remote: true %>
+
+
+
+<script>
+
+  $(window).on('scroll', function() {
+
+    if ($(window).scrollTop() >= $(document).height() - $(window).height() - 200) {
+
+      $('.pagination a[rel="next"]').click();
+
+    }
+
+  });
+
+</script><% if current_user.liked?(post) %>
+
+  <%= button_to "<i class='fas fa-thumbs-up'></i> Like (#{post.likes.count})".html_safe, post_likes_path(post_id: post.id), method: :post, remote: true, class: "btn btn-primary text-black btn-sm like-button", data: { post_id: post.id }, aria: { pressed: true } %>
+
+<% else %>
+
+  <%= button_to "<i class='far fa-thumbs-up'></i> Like (#{post.likes.count})".html_safe, post_likes_path(post_id: post.id), method: :post, remote: true, class: "btn btn-outline-primary btn-sm like-button", data: { post_id: post.id }, aria: { pressed: false } %>
+
+<% end %>
+
+
+
+<script>
+
+  document.addEventListener('turbolinks:load', function() { // Use turbolinks load
+
+    let isRequestInProgress = false;
+
+
+
+    document.addEventListener('click', function(event) {
+
+      if (event.target.classList.contains('like-button') && !isRequestInProgress) {
+
+        event.preventDefault();
+
+        event.stopPropagation(); // Prevent event bubbling
+
+
+
+        const button = event.target;
+
+        const postId = button.dataset.postId;
+
+        const url = button.form.action;
+
+        const isLiked = button.getAttribute('aria-pressed') === 'true';
+
+        const likeCount = parseInt(button.textContent.match(/\d+/)[0]);
+
+
+
+        // Optimistic UI update
+
+        button.setAttribute('aria-pressed', !isLiked);
+
+        button.innerHTML = `${isLiked ? '<i class="far fa-thumbs-up"></i> Like (' + (likeCount - 1) + ')' : '<i class="fas fa-thumbs-up"></i> Like (' + (likeCount + 1) + ')'}`;
+
+        button.classList.toggle('btn-primary', !isLiked);
+
+        button.classList.toggle('btn-outline-primary', isLiked);
+
+
+
+        // Animation
+
+        button.classList.add('like-button-animation');
+
+        setTimeout(() => button.classList.remove('like-button-animation'), 300);
+
+
+
+        isRequestInProgress = true;
+
+
+
+        fetch(url, {
+
+          method: 'POST',
+
+          headers: {
+
+            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+
+            'Accept': 'text/html'
+
+          }
+
+        })
+
+        .then(response => {
+
+          if (!response.ok) throw new Error('Network response was not ok');
+
+          return response.text();
+
+        })
+
+        .then(html => {
+
+          const tempDiv = document.createElement('div');
+
+          tempDiv.innerHTML = html;
+
+          const newButton = tempDiv.querySelector('.like-button');
+
+          button.replaceWith(newButton);
+
+        })
+
+        .catch(error => {
+
+          console.error('Error:', error);
+
+          // Revert UI on error
+
+          button.setAttribute('aria-pressed', isLiked);
+
+          button.innerHTML = `${isLiked ? '<i class="fas fa-thumbs-up"></i> Like (' + (likeCount) + ')' : '<i class="far fa-thumbs-up"></i> Like (' + (likeCount) + ')'}`;
+
+          button.classList.toggle('btn-primary', isLiked);
+
+          button.classList.toggle('btn-outline-primary', !isLiked);
+
+          showToast('Failed to update like. Please try again.', 'error');
+
+        })
+
+        .finally(() => {
+
+          isRequestInProgress = false;
+
+        });
+
+      }
+
+    });
+
+
+
+    // Toast notification function
+
+    function showToast(message, type = 'error') {
+
+      const toast = document.createElement('div');
+
+      toast.classList.add('toast', `toast-${type}`);
+
+      toast.innerHTML = `<i class="${type === 'error' ? 'fas fa-exclamation-triangle' : 'fas fa-check-circle'}"></i> ${message}`;
+
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+
+        toast.classList.add('toast-show');
+
+        setTimeout(() => {
+
+          toast.classList.remove('toast-show');
+
+          setTimeout(() => {
+
+            document.body.removeChild(toast);
+
+          }, 300);
+
+        }, 3000);
+
+      }, 10);
+
+    }
+
+  });
+
+</script>
+
+
+
+<style>
+
+  .like-button-animation {
+
+    transform: scale(1.1);
+
+    transition: transform 0.3s ease;
+
+  }
+
+
+
+  .toast {
+
+    position: fixed;
+
+    bottom: 20px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    background-color: rgba(0, 0, 0, 0.8);
+
+    color: white;
+
+    padding: 10px 20px;
+
+    border-radius: 5px;
+
+    opacity: 0;
+
+    transition: opacity 0.3s ease;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+  }
+
+
+
+  .toast-show {
+
+    opacity: 1;
+
+  }
+
+
+
+  .like-button {
+
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    background-image: linear-gradient(to bottom, #ffffff, #f0f0f0);
+
+  }
+
+
+
+  .like-button:hover{
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+  }
+
+
+
+  .like-button:active {
+
+    transform: scale(0.95);
+
+  }
+
+
+
+  .toast-error {
+
+    background-color: rgba(220, 53, 69, 0.8); /* Red */
+
+  }
+
+
+
+  .toast-success {
+
+    background-color: rgba(25, 135, 84, 0.8); /* Green */
+
+  }
+
+
+
+  .toast i {
+
+    font-size: 1.2em;
+
+  }
+
+</style><%= form_with model: @post, local: true do |form| %>
+
+  <div class="card p-3 mb-3">
+
+    <div class="d-flex align-items-center mb-3">
+
+      <% if current_user.avatar.attached? %>
+
+        <%= image_tag current_user.avatar, class: "rounded-circle me-2", width: 50, height: 50 %>
+
+      <% else %>
+
+        <%= image_tag "default_avatar.png", class: "rounded-circle me-2", width: 50, height: 50 %>
+
+      <% end %>
+
+     
+
+      <div class="w-100">
+
+        <%= form.text_area :content, class: "form-control", placeholder: "What's on your mind?", rows: 3 %>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="mb-3">
+
+      <%= form.file_field :media_files, multiple: true, class: "form-control", id: "media-upload" %>
+
+    </div>
+
+
+
+    <!-- Preview area -->
+
+    <div id="media-preview" class="d-flex flex-wrap mt-2"></div>
+
+
+
+    <%= form.submit "Post", class: "btn btn-primary w-100 mt-3" %>
+
+  </div>
+
+<% end %>
+
+
+
+<style>
+
+  .preview-item {
+
+    position: relative;
+
+    margin-right: 10px;
+
+    margin-bottom: 10px;
+
+  }
+
+
+
+  .preview-image,
+
+  .preview-video {
+
+    border-radius: 8px;
+
+    object-fit: cover;
+
+    width: 150px;
+
+    height: 150px;
+
+  }
+
+
+
+  #media-preview {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+  }
+
+
+
+  .card {
+
+    border-radius: 10px;
+
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  }
+
+
+
+  .form-control {
+
+    border-radius: 8px;
+
+    border: 1px solid #ddd;
+
+    padding: 10px;
+
+  }
+
+
+
+  .btn-primary {
+
+    background-color: #007bff;
+
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 10px;
+
+    font-size: 16px;
+
+  }
+
+
+
+  .btn-primary:hover {
+
+    background-color: #0056b3;
+
+  }
+
+</style>
+
+
+
+<script>
+
+  // JavaScript to handle the preview of images and videos
+
+  document.getElementById('media-upload').addEventListener('change', function(event) {
+
+    const previewContainer = document.getElementById('media-preview');
+
+    previewContainer.innerHTML = ''; // Clear previous previews
+
+
+
+    const files = event.target.files;
+
+
+
+    Array.from(files).forEach(file => {
+
+      const reader = new FileReader();
+
+
+
+      reader.onload = function(e) {
+
+        const fileURL = e.target.result;
+
+
+
+        // Create a preview for each file
+
+        const filePreview = document.createElement('div');
+
+        filePreview.classList.add('preview-item');
+
+
+
+        if (file.type.startsWith('image/')) {
+
+          // Image preview
+
+          const img = document.createElement('img');
+
+          img.src = fileURL;
+
+          img.classList.add('preview-image');
+
+          filePreview.appendChild(img);
+
+        } else if (file.type.startsWith('video/')) {
+
+          // Video preview
+
+          const video = document.createElement('video');
+
+          video.src = fileURL;
+
+          video.classList.add('preview-video');
+
+          video.controls = true;
+
+          filePreview.appendChild(video);
+
+        }
+
+
+
+        previewContainer.appendChild(filePreview);
+
+      };
+
+
+
+      reader.readAsDataURL(file); // Read the file as a data URL
+
+    });
+
+  });
+
+</script>

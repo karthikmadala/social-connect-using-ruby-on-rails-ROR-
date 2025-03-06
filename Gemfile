@@ -23,6 +23,8 @@ gem "devise"
 
 gem "image_processing"
 
+gem "kaminari"
+
 # Gemfile
 gem "sidekiq"
 
@@ -75,3 +77,5 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "webpacker", "~> 5.4"
