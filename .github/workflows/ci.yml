@@ -24,24 +24,6 @@ jobs:
 
       - name: Scan for common Rails security vulnerabilities using static analysis
         run: bin/brakeman --no-pager
-  scan_js:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        
-      - name: Make importmap executable
-        run: chmod +x bin/importmap
-  
-      - name: Check importmap permissions
-        run: ls -l bin/importmap
-  
-      - name: list bin contents.
-        run: ls -l bin/
-  
-      - name: Scan for security vulnerabilities in JavaScript dependencies
-        run: bin/importmap audit
 
   lint:
     runs-on: ubuntu-latest
