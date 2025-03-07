@@ -19,15 +19,10 @@ class PostsController < ApplicationController
     @post = current_user.posts.build(post_params)
     if @post.save
       @post.extract_mentions
-      ActionCable.server.broadcast "posts", post: render_to_string(partial: "posts/post", locals: { post: @post })
-      respond_to do |format|
-        format.html { redirect_to posts_path, notice: "Post created!" }
-        format.js { render js: "prependPost('#{j render_to_string(partial: 'posts/post', locals: { post: @post })}');" }
-      end
+      flash[:notice] = "Post created successfully!"
+      redirect_to posts_path
     else
-      @posts = Post.includes(:user, :likes, :comments).with_attached_photos.order(created_at: :desc).page(params[:page]).per(10)
-      flash.now[:alert] = "Post could not be created. Please check the errors."
-      render :index
+      render :new
     end
   end
 

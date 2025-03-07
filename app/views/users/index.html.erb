@@ -26,7 +26,6 @@
                     <span class="badge bg-warning">Friend request sent ✅</span>
                     <%= button_to 'Cancel Request', unfriend_friendships_path(friend_id: user.id), 
                           method: :delete, 
-                          data: { confirm: 'Are you sure?' }, 
                           class: 'btn btn-warning btn-sm btn-gradient' %>
                   <% else %>
                     <%= button_to "Add Friend", friendships_path(friend_id: user.id), 

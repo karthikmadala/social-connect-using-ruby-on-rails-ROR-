@@ -35,7 +35,7 @@
       <% if current_user %>
         <ul class="navbar-nav mx-auto">
           <li class="nav-item">
-            <span class="nav-link text-white hover-effect fw-bold"><%= current_user.full_name %></span>
+            <span class="nav-link text-white hover-effect fw-bold"><%= link_to current_user.full_name, root_path ,class:"nav-link hover-effect fw-bold" %></span>
           </li>
         </ul>
       <% end %>

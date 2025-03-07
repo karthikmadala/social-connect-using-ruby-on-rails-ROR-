@@ -25,7 +25,7 @@
               <!-- Accept and Reject Buttons -->
               <div class="d-flex justify-content-end mt-3">
                 <%= button_to "Accept", accept_friendship_path(request), method: :post, class: "btn btn-success btn-gradient me-2" %>
-                <%= button_to "Reject", reject_friendship_path(request), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger btn-gradient" %>
+                <%= button_to "Reject", reject_friendship_path(request), method: :delete, class: "btn btn-danger btn-gradient" %>
               </div>
             </div>
           </div>

@@ -53,7 +53,7 @@ Rails.application.routes.draw do
   end
 
   resources :posts do
-    resources :comments, only: [ :create, :destroy ]
+    resources :comments, only: [ :create, :destroy ,:update]
     resources :likes, only: [ :create, :destroy ]  # ✅ Add this line for likes
   end
 end
